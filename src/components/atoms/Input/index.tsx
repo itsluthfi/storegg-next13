@@ -1,7 +1,7 @@
 interface InputProps {
-  label: String;
-  type: String;
-  id: String;
+  label: string;
+  type: string;
+  id: string;
 }
 
 export default function Input(props: InputProps) {

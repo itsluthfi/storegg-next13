@@ -2,12 +2,12 @@ import Image from 'next/image';
 import cx from 'classnames';
 
 interface TableRowProps {
-  title: String;
-  category: String;
-  item: Number;
-  price: Number;
+  title: string;
+  category: string;
+  item: number;
+  price: number;
   status: 'Pending' | 'Success' | 'Failed';
-  image: String;
+  image: string;
 }
 
 export default function TableRow(props: TableRowProps) {

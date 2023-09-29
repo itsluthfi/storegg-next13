@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 interface CategoryProps {
   children: ReactNode;
-  nominal: Number;
+  nominal: number;
   icon: 'ic-desktop' | 'ic-mobile';
 }
 
