@@ -12,7 +12,7 @@ export default function Member() {
       </Head>
 
       <section className="overview overflow-auto">
-        <Sidebar />
+        <Sidebar activeMenu="overview" />
         <OverviewContent />
       </section>
     </>
