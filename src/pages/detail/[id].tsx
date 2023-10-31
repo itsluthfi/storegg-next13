@@ -8,13 +8,20 @@ import TopUpForm from '@/components/organisms/TopUpForm';
 import TopUpItem from '@/components/organisms/TopUpItem';
 
 export default function Detail() {
-  const [dataItem, setDataItem] = useState([]);
   const { query, isReady } = useRouter();
+  const [dataItem, setDataItem] = useState([
+    {
+      name: '',
+      thumbnail: '',
+      category: {
+        name: '',
+      },
+    },
+  ]);
 
   const getDetailVoucherAPI = useCallback(async (id) => {
     const data = await getDetailVoucher(id);
     setDataItem(data);
-    console.log(data);
   }, []);
 
   useEffect(() => {
