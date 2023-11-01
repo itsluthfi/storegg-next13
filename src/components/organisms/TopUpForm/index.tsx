@@ -2,7 +2,9 @@ import Link from 'next/link';
 import NominalItem from './NominalItem';
 import PaymentItem from './PaymentItem';
 
-export default function TopUpForm() {
+export default function TopUpForm(props) {
+  const { nominals } = props;
+
   return (
     <form action="./checkout.html" method="POST">
       <div className="pt-md-50 pt-30">
@@ -28,24 +30,15 @@ export default function TopUpForm() {
           Nominal Top Up
         </p>
         <div className="row justify-content-between">
-          <NominalItem
-            _id="123"
-            coinQuantity={125}
-            coinName="GOLD"
-            price={30000}
-          />
-          <NominalItem
-            _id="124"
-            coinQuantity={150}
-            coinName="PLATINUM"
-            price={35000}
-          />
-          <NominalItem
-            _id="125"
-            coinQuantity={175}
-            coinName="JEWEL"
-            price={40000}
-          />
+          {nominals.map((nominal) => (
+            <NominalItem
+              key={nominal._id}
+              _id={nominal._id}
+              coinQuantity={nominal.coinQuantity}
+              coinName={nominal.coinName}
+              price={nominal.price}
+            />
+          ))}
           <div className="col-lg-4 col-sm-6" />
         </div>
       </div>
