@@ -1,8 +1,13 @@
 import Link from 'next/link';
 import NominalItem from './NominalItem';
 import PaymentItem from './PaymentItem';
+import { NominalTypes } from '@/services/data-types';
 
-export default function TopUpForm(props) {
+interface TopUpFormProps {
+  nominals: NominalTypes[];
+}
+
+export default function TopUpForm(props: TopUpFormProps) {
   const { nominals } = props;
 
   return (
