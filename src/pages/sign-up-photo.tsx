@@ -3,10 +3,17 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getGameCategory } from '@/services/player';
+import { setSignUp } from '@/services/auth';
 
 export default function SignUpPhoto() {
   const [categories, setCategories] = useState([]);
   const [favorite, setFavorite] = useState('');
+  const [image, setImage] = useState('');
+  const [imagePreview, setImagePreview] = useState('/icon/upload.svg');
+  const [localForm, setLocalForm] = useState({
+    name: '',
+    email: '',
+  });
 
   const getGameCategoryAPI = useCallback(async () => {
     const data = await getGameCategory();
@@ -18,8 +25,28 @@ export default function SignUpPhoto() {
     getGameCategoryAPI();
   }, []);
 
+  useEffect(() => {
+    const getLocalForm = localStorage.getItem('user-form');
+    const form = JSON.parse(getLocalForm);
+    setLocalForm(form);
+  }, []);
+
   const onSubmit = () => {
-    console.log(favorite);
+    const getLocalForm = localStorage.getItem('user-form');
+    const form = JSON.parse(getLocalForm);
+    const data = new FormData();
+
+    data.append('image', image);
+    data.append('email', form.email);
+    data.append('name', form.name);
+    data.append('password', form.password);
+    data.append('username', form.name);
+    data.append('phoneNumber', '08123456789');
+    data.append('role', 'user');
+    data.append('status', 'Y');
+    data.append('favorite', favorite);
+
+    setSignUp(data);
   };
 
   return (
@@ -39,9 +66,10 @@ export default function SignUpPhoto() {
                   <div className="image-upload text-center">
                     <label htmlFor="avatar">
                       <Image
-                        src="/icon/upload.svg"
+                        src={imagePreview}
                         width={120}
                         height={120}
+                        className="img-upload"
                         alt="upload"
                       />
                     </label>
@@ -50,14 +78,19 @@ export default function SignUpPhoto() {
                       type="file"
                       name="avatar"
                       accept="image/png, image/jpeg"
+                      onChange={(event) => {
+                        const img = event.target.files[0];
+                        setImage(img);
+                        setImagePreview(URL.createObjectURL(img));
+                      }}
                     />
                   </div>
                 </div>
                 <h2 className="fw-bold text-xl text-center color-palette-1 m-0">
-                  Shayna Anne
+                  {localForm.name}
                 </h2>
                 <p className="text-lg text-center color-palette-1 m-0">
-                  shayna@anne.com
+                  {localForm.email}
                 </p>
                 <div className="pt-50 pb-50">
                   <label
@@ -86,15 +119,13 @@ export default function SignUpPhoto() {
               </div>
 
               <div className="button-group d-flex flex-column mx-auto">
-                <Link href="#" legacyBehavior>
-                  <button
-                    className="btn btn-create fw-medium text-lg text-white rounded-pill mb-16"
-                    type="submit"
-                    onClick={onSubmit}
-                  >
-                    Create My Account
-                  </button>
-                </Link>
+                <button
+                  className="btn btn-create fw-medium text-lg text-white rounded-pill mb-16"
+                  type="submit"
+                  onClick={onSubmit}
+                >
+                  Create My Account
+                </button>
                 <a
                   className="btn btn-tnc text-lg color-palette-1 text-decoration-underline pt-15"
                   href="#"
