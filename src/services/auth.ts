@@ -6,8 +6,13 @@ const API_VER = 'api/v1';
 export async function setSignUp(data) {
   const URL = 'auth/signup';
 
-  const response = await axios.post(`${API_URL}/${API_VER}/${URL}`, data);
+  const response = await axios
+    .post(`${API_URL}/${API_VER}/${URL}`, data)
+    .catch((err) => err.response);
   const axiosResponse = response.data;
+  if (axiosResponse?.error === 1) {
+    return axiosResponse;
+  }
   return axiosResponse.data;
 }
 

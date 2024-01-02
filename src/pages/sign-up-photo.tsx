@@ -1,9 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
 import { getGameCategory } from '@/services/player';
 import { setSignUp } from '@/services/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignUpPhoto() {
   const [categories, setCategories] = useState([]);
@@ -14,6 +16,7 @@ export default function SignUpPhoto() {
     name: '',
     email: '',
   });
+  const router = useRouter();
 
   const getGameCategoryAPI = useCallback(async () => {
     const data = await getGameCategory();
@@ -31,7 +34,7 @@ export default function SignUpPhoto() {
     setLocalForm(form);
   }, []);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const getLocalForm = localStorage.getItem('user-form');
     const form = JSON.parse(getLocalForm);
     const data = new FormData();
@@ -46,7 +49,15 @@ export default function SignUpPhoto() {
     data.append('status', 'Y');
     data.append('favorite', favorite);
 
-    setSignUp(data);
+    const result = await setSignUp(data);
+    console.log('result', result);
+    if (result?.error === 1) {
+      toast.error(result.message);
+    } else {
+      toast.success('Registrasi akun berhasil!');
+      router.push('/sign-up-success');
+      localStorage.removeItem('user-form');
+    }
   };
 
   return (
@@ -121,7 +132,7 @@ export default function SignUpPhoto() {
               <div className="button-group d-flex flex-column mx-auto">
                 <button
                   className="btn btn-create fw-medium text-lg text-white rounded-pill mb-16"
-                  type="submit"
+                  type="button"
                   onClick={onSubmit}
                 >
                   Create My Account
@@ -137,6 +148,7 @@ export default function SignUpPhoto() {
             </div>
           </form>
         </div>
+        <ToastContainer />
       </section>
     </>
   );
