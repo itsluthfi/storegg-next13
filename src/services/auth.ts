@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { SignInTypes } from './data-types';
 
 const API_URL = process.env.NEXT_PUBLIC_API;
 const API_VER = 'api/v1';
 
-export async function setSignUp(data) {
+export async function setSignUp(data: FormData) {
   const URL = 'auth/signup';
 
   const response = await axios
@@ -16,7 +17,7 @@ export async function setSignUp(data) {
   return axiosResponse.data;
 }
 
-export async function setSignIn(data) {
+export async function setSignIn(data: SignInTypes) {
   const URL = 'auth/signin';
 
   const response = await axios
