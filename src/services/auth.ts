@@ -16,6 +16,28 @@ export async function setSignUp(data) {
   return axiosResponse.data;
 }
 
-export async function setLogin() {
-  return null;
+export async function setSignIn(data) {
+  const URL = 'auth/signin';
+
+  const response = await axios
+    .post(`${API_URL}/${API_VER}/${URL}`, data)
+    .catch((err) => err.response);
+
+  if (response.status > 300) {
+    const res = {
+      error: true,
+      message: response.data.message,
+      data: null,
+    };
+
+    return res;
+  }
+
+  const res = {
+    error: false,
+    message: 'success',
+    data: response.data.data,
+  };
+
+  return res;
 }
