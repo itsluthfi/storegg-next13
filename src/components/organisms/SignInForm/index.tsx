@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { setSignIn } from '@/services/auth';
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function SignInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const onSubmit = async () => {
     const data = {
@@ -22,6 +24,7 @@ export default function SignInForm() {
         toast.error(response.message);
       } else {
         toast.success('Login berhasil!');
+        router.push('/');
       }
     }
   };
