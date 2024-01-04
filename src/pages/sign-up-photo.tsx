@@ -49,10 +49,9 @@ export default function SignUpPhoto() {
     data.append('status', 'Y');
     data.append('favorite', favorite);
 
-    const result = await setSignUp(data);
-    console.log('result', result);
-    if (result?.error === 1) {
-      toast.error(result.message);
+    const response = await setSignUp(data);
+    if (response.error) {
+      toast.error(response.message);
     } else {
       toast.success('Registrasi akun berhasil!');
       router.push('/sign-up-success');
