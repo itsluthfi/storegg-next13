@@ -23,3 +23,16 @@ export interface SignInTypes {
   email: string;
   password: string;
 }
+
+export interface UserTypes {
+  id: string;
+  username: string;
+  email: string;
+  name: string;
+  avatar: string;
+}
+
+export interface JTWPayloadTypes {
+  player: UserTypes;
+  iat: number;
+}
