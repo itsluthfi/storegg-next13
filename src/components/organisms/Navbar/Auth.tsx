@@ -1,27 +1,36 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
+import { JTWPayloadTypes, UserTypes } from '@/services/data-types';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState({
     avatar: '',
   });
+  const router = useRouter();
 
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
       const jwtToken = atob(token);
-      const payload = jwtDecode(jwtToken);
-      const user = payload.player;
+      const payload: JTWPayloadTypes = jwtDecode(jwtToken);
+      const userPayload: UserTypes = payload.player;
       const IMG = process.env.NEXT_PUBLIC_IMAGE;
-      user.avatar = `${IMG}/${user.avatar}`;
+      user.avatar = `${IMG}/${userPayload.avatar}`;
       setIsLogin(true);
       setUser(user);
     }
   }, []);
+
+  const onLogout = () => {
+    Cookies.remove('token');
+    router.push('/');
+    setIsLogin(false);
+  };
 
   if (isLogin) {
     return (
@@ -69,9 +78,12 @@ export default function Auth() {
               </Link>
             </li>
             <li>
-              <Link href="/sign-in" legacyBehavior>
-                <a className="dropdown-item text-lg color-palette-2">Log Out</a>
-              </Link>
+              <button
+                onClick={onLogout}
+                className="dropdown-item text-lg color-palette-2"
+              >
+                Log Out
+              </button>
             </li>
           </ul>
         </div>
