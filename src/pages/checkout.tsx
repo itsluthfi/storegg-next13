@@ -6,7 +6,11 @@ import CheckoutItem from '@/components/organisms/CheckoutItem';
 import { jwtDecode } from 'jwt-decode';
 import { JTWPayloadTypes, UserTypes } from '@/services/data-types';
 
-export default function Checkout(props) {
+interface CheckoutProps {
+  user: UserTypes;
+}
+
+export default function Checkout(props: CheckoutProps) {
   const { user } = props;
 
   return (
