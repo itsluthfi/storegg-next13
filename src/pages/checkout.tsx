@@ -3,8 +3,12 @@ import Image from 'next/image';
 import CheckoutConfirmation from '@/components/organisms/CheckoutConfirmation';
 import CheckoutDetail from '@/components/organisms/CheckoutDetail';
 import CheckoutItem from '@/components/organisms/CheckoutItem';
+import { jwtDecode } from 'jwt-decode';
+import { JTWPayloadTypes, UserTypes } from '@/services/data-types';
 
-export default function Checkout() {
+export default function Checkout(props) {
+  const { user } = props;
+
   return (
     <>
       <Head>
@@ -34,4 +38,29 @@ export default function Checkout() {
       </section>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false,
+      },
+    };
+  }
+
+  const jwtToken = Buffer.from('token', 'base64').toString('ascii');
+  const payload: JTWPayloadTypes = jwtDecode(jwtToken);
+  const userPayload: UserTypes = payload.player;
+  const IMG = process.env.NEXT_PUBLIC_IMAGE;
+  userPayload.avatar = `${IMG}/${userPayload.avatar}`;
+
+  return {
+    props: {
+      user: userPayload,
+    },
+  };
 }
