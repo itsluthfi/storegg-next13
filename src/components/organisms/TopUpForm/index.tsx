@@ -1,17 +1,27 @@
-import Link from 'next/link';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import NominalItem from './NominalItem';
 import PaymentItem from './PaymentItem';
 import { NominalTypes } from '@/services/data-types';
-import { useState } from 'react';
 
 interface TopUpFormProps {
   nominals: NominalTypes[];
 }
 
+interface PaymentDummyTypes {
+  _id: string;
+  type: string;
+  name: string;
+}
+
 export default function TopUpForm(props: TopUpFormProps) {
   const { nominals } = props;
+  const router = useRouter();
 
   const [verifyID, setVerifyID] = useState('');
+  const [bankAccountName, setBankAccountName] = useState('');
+  const [nominalItem, setNominalItem] = useState({});
+  const [paymentItem, setPaymentItem] = useState({});
 
   const payments = [
     {
@@ -32,7 +42,31 @@ export default function TopUpForm(props: TopUpFormProps) {
   ];
 
   const onNominalItemClick = (data: NominalTypes) => {
-    localStorage.setItem('nominal-data', JSON.stringify(data));
+    setNominalItem(data);
+  };
+
+  const onPaymentItemClick = (data: PaymentDummyTypes) => {
+    setPaymentItem(data);
+  };
+
+  const onSubmit = () => {
+    if (
+      verifyID === '' ||
+      nominalItem === {} ||
+      paymentItem === {} ||
+      bankAccountName === ''
+    ) {
+      alert('Silakan isi form dan pilih item yang tersedia!');
+    } else {
+      const data = {
+        verifyID,
+        nominalItem,
+        paymentItem,
+        bankAccountName,
+      };
+      localStorage.setItem('topup-data', JSON.stringify(data));
+      router.push('/checkout');
+    }
   };
 
   return (
@@ -87,6 +121,7 @@ export default function TopUpForm(props: TopUpFormProps) {
                 bankID={payment._id}
                 type={payment.type}
                 name={payment.name}
+                onChange={() => onPaymentItemClick(payment)}
               />
             ))}
             <div className="col-lg-4 col-sm-6" />
@@ -107,17 +142,18 @@ export default function TopUpForm(props: TopUpFormProps) {
           name="bankAccount"
           aria-describedby="bankAccount"
           placeholder="Enter your Bank Account Name"
+          value={bankAccountName}
+          onChange={(event) => setBankAccountName(event.target.value)}
         />
       </div>
       <div className="d-sm-block d-flex flex-column w-100">
-        <Link href="/checkout" legacyBehavior>
-          <a
-            type="submit"
-            className="btn btn-submit rounded-pill fw-medium text-white border-0 text-lg"
-          >
-            Continue
-          </a>
-        </Link>
+        <button
+          type="button"
+          className="btn btn-submit rounded-pill fw-medium text-white border-0 text-lg"
+          onClick={onSubmit}
+        >
+          Continue
+        </button>
       </div>
     </form>
   );
