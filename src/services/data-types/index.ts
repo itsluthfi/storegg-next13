@@ -19,6 +19,20 @@ export interface NominalTypes {
   price: number;
 }
 
+export interface BankTypes {
+  _id: string;
+  name: string;
+  bankName: string;
+  noRekening: string;
+}
+
+export interface PaymentTypes {
+  _id: string;
+  type: string;
+  status: string;
+  banks: BankTypes[];
+}
+
 export interface SignInTypes {
   email: string;
   password: string;
