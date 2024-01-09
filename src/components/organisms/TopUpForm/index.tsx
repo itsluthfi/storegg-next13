@@ -13,6 +13,24 @@ export default function TopUpForm(props: TopUpFormProps) {
 
   const [verifyID, setVerifyID] = useState('');
 
+  const payments = [
+    {
+      _id: '1',
+      type: 'Transfer',
+      name: 'BCA',
+    },
+    {
+      _id: '2',
+      type: 'Transfer',
+      name: 'Mandiri',
+    },
+    {
+      _id: '3',
+      type: 'QRIS',
+      name: 'GoPay',
+    },
+  ];
+
   const onNominalItemClick = (data: NominalTypes) => {
     localStorage.setItem('nominal-data', JSON.stringify(data));
   };
@@ -63,8 +81,14 @@ export default function TopUpForm(props: TopUpFormProps) {
         </p>
         <fieldset id="paymentMethod">
           <div className="row justify-content-between">
-            <PaymentItem bankID="126" type="Transfer" name="VISA" />
-            <PaymentItem bankID="127" type="Transfer" name="BCA" />
+            {payments.map((payment) => (
+              <PaymentItem
+                key={payment._id}
+                bankID={payment._id}
+                type={payment.type}
+                name={payment.name}
+              />
+            ))}
             <div className="col-lg-4 col-sm-6" />
           </div>
         </fieldset>
