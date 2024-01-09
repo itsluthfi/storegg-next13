@@ -2,6 +2,7 @@ import Link from 'next/link';
 import NominalItem from './NominalItem';
 import PaymentItem from './PaymentItem';
 import { NominalTypes } from '@/services/data-types';
+import { useState } from 'react';
 
 interface TopUpFormProps {
   nominals: NominalTypes[];
@@ -9,6 +10,12 @@ interface TopUpFormProps {
 
 export default function TopUpForm(props: TopUpFormProps) {
   const { nominals } = props;
+
+  const [verifyID, setVerifyID] = useState('');
+
+  const onNominalItemClick = (data: NominalTypes) => {
+    localStorage.setItem('nominal-data', JSON.stringify(data));
+  };
 
   return (
     <form action="./checkout.html" method="POST">
@@ -27,6 +34,8 @@ export default function TopUpForm(props: TopUpFormProps) {
             name="ID"
             aria-describedby="verifyID"
             placeholder="Enter your ID"
+            value={verifyID}
+            onChange={(event) => setVerifyID(event.target.value)}
           />
         </div>
       </div>
@@ -42,6 +51,7 @@ export default function TopUpForm(props: TopUpFormProps) {
               coinQuantity={nominal.coinQuantity}
               coinName={nominal.coinName}
               price={nominal.price}
+              onChange={() => onNominalItemClick(nominal)}
             />
           ))}
           <div className="col-lg-4 col-sm-6" />

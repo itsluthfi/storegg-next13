@@ -22,6 +22,7 @@ export default function Detail() {
     const data = await getDetailVoucher(id);
     setDataItem(data);
     setNominals(data.nominals);
+    localStorage.setItem('data-item', JSON.stringify(data));
   }, []);
 
   useEffect(() => {
