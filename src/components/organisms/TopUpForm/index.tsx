@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import NominalItem from './NominalItem';
 import PaymentItem from './PaymentItem';
 import { NominalTypes } from '@/services/data-types';
+import { toast } from 'react-toastify';
 
 interface TopUpFormProps {
   nominals: NominalTypes[];
@@ -56,7 +57,7 @@ export default function TopUpForm(props: TopUpFormProps) {
       paymentItem === {} ||
       bankAccountName === ''
     ) {
-      alert('Silakan isi form dan pilih item yang tersedia!');
+      toast.warning('Silakan isi form dan pilih item yang tersedia!');
     } else {
       const data = {
         verifyID,
