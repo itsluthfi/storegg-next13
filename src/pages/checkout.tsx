@@ -56,7 +56,7 @@ export async function getServerSideProps({ req }) {
     };
   }
 
-  const jwtToken = Buffer.from('token', 'base64').toString('ascii');
+  const jwtToken = Buffer.from(token, 'base64').toString('ascii');
   const payload: JTWPayloadTypes = jwtDecode(jwtToken);
   const userPayload: UserTypes = payload.player;
   const IMG = process.env.NEXT_PUBLIC_IMAGE;
