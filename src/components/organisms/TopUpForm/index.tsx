@@ -2,17 +2,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import NominalItem from './NominalItem';
 import PaymentItem from './PaymentItem';
-import { NominalTypes } from '@/services/data-types';
+import { BankTypes, NominalTypes, PaymentTypes } from '@/services/data-types';
 import { toast } from 'react-toastify';
 
 interface TopUpFormProps {
   nominals: NominalTypes[];
-}
-
-interface PaymentDummyTypes {
-  _id: string;
-  type: string;
-  name: string;
 }
 
 export default function TopUpForm(props: TopUpFormProps) {
@@ -24,29 +18,56 @@ export default function TopUpForm(props: TopUpFormProps) {
   const [nominalItem, setNominalItem] = useState({});
   const [paymentItem, setPaymentItem] = useState({});
 
-  const payments = [
+  const paymentsDummyData = [
     {
-      _id: '1',
+      banks: [
+        {
+          bankName: 'QRIS',
+          name: 'PT Store GG Indonesia',
+          noRekening: '1800 - 9090 - 2021',
+          _id: 'dummybank1',
+        },
+        {
+          bankName: 'Mandiri',
+          name: 'PT Store GG Indonesia',
+          noRekening: '1800 - 9090 - 2021',
+          _id: 'dummybank2',
+        },
+      ],
+      status: 'Y',
       type: 'Transfer',
-      name: 'BCA',
+      _id: 'dummypayment1',
     },
     {
-      _id: '2',
-      type: 'Transfer',
-      name: 'Mandiri',
-    },
-    {
-      _id: '3',
-      type: 'QRIS',
-      name: 'GoPay',
+      banks: [
+        {
+          bankName: 'Ambil Sendiri',
+          name: 'PT Store GG Indonesia',
+          noRekening: '1800 - 9090 - 2021',
+          _id: 'dummybank3',
+        },
+        {
+          bankName: 'Antar',
+          name: 'PT Store GG Indonesia',
+          noRekening: '1800 - 9090 - 2021',
+          _id: 'dummybank4',
+        },
+      ],
+      status: 'Y',
+      type: 'COD',
+      _id: 'dummypayment2',
     },
   ];
 
-  const onNominalItemClick = (data: NominalTypes) => {
+  const onNominalItemChange = (data: NominalTypes) => {
     setNominalItem(data);
   };
 
-  const onPaymentItemClick = (data: PaymentDummyTypes) => {
+  const onPaymentItemChange = (payment: PaymentTypes, bank: BankTypes) => {
+    const data = {
+      payment,
+      bank,
+    };
     setPaymentItem(data);
   };
 
@@ -104,7 +125,7 @@ export default function TopUpForm(props: TopUpFormProps) {
               coinQuantity={nominal.coinQuantity}
               coinName={nominal.coinName}
               price={nominal.price}
-              onChange={() => onNominalItemClick(nominal)}
+              onChange={() => onNominalItemChange(nominal)}
             />
           ))}
           <div className="col-lg-4 col-sm-6" />
@@ -116,15 +137,17 @@ export default function TopUpForm(props: TopUpFormProps) {
         </p>
         <fieldset id="paymentMethod">
           <div className="row justify-content-between">
-            {payments.map((payment) => (
-              <PaymentItem
-                key={payment._id}
-                bankID={payment._id}
-                type={payment.type}
-                name={payment.name}
-                onChange={() => onPaymentItemClick(payment)}
-              />
-            ))}
+            {paymentsDummyData.map((payment) =>
+              payment.banks.map((bank) => (
+                <PaymentItem
+                  key={payment._id}
+                  bankID={bank._id}
+                  type={payment.type}
+                  name={bank.bankName}
+                  onChange={() => onPaymentItemChange(payment, bank)}
+                />
+              ))
+            )}
             <div className="col-lg-4 col-sm-6" />
           </div>
         </fieldset>
