@@ -25,18 +25,18 @@ export default function TopUpForm(props: TopUpFormProps) {
           bankName: 'QRIS',
           name: 'PT Store GG Indonesia',
           noRekening: '1800 - 9090 - 2021',
-          _id: 'dummybank1',
+          _id: '659fe0b4af3a93af997eea3f',
         },
         {
           bankName: 'Mandiri',
           name: 'PT Store GG Indonesia',
           noRekening: '1800 - 9090 - 2021',
-          _id: 'dummybank2',
+          _id: '659fe0c928a51bbeac787815',
         },
       ],
       status: 'Y',
       type: 'Transfer',
-      _id: 'dummypayment1',
+      _id: '659fe0d65d660e093e4ce30b',
     },
     {
       banks: [
@@ -44,18 +44,18 @@ export default function TopUpForm(props: TopUpFormProps) {
           bankName: 'Ambil Sendiri',
           name: 'PT Store GG Indonesia',
           noRekening: '1800 - 9090 - 2021',
-          _id: 'dummybank3',
+          _id: '659fe0dd25011ba83def5917',
         },
         {
           bankName: 'Antar',
           name: 'PT Store GG Indonesia',
           noRekening: '1800 - 9090 - 2021',
-          _id: 'dummybank4',
+          _id: '659fe0e5199a3c74a2f6473a',
         },
       ],
       status: 'Y',
       type: 'COD',
-      _id: 'dummypayment2',
+      _id: '659fe0ee07c9ca7db48b4631',
     },
   ];
 
