@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 
 export default function CheckoutItem() {
   const [dataItem, setDataItem] = useState({
-    thumbnail: '',
-    name: '',
-    category: {
+    detail: {
+      thumbnail: '',
       name: '',
+      category: {
+        name: '',
+      },
     },
   });
 
@@ -23,16 +25,18 @@ export default function CheckoutItem() {
       <div className="pe-4">
         <div className="cropped">
           <img
-            src={`${IMG}/${dataItem.thumbnail}`}
+            src={`${IMG}/${dataItem.detail.thumbnail}`}
             className="img-fluid"
             alt=""
           />
         </div>
       </div>
       <div>
-        <p className="fw-bold text-xl color-palette-1 mb-10">{dataItem.name}</p>
+        <p className="fw-bold text-xl color-palette-1 mb-10">
+          {dataItem.detail.name}
+        </p>
         <p className="color-palette-2 m-0">
-          Category: {dataItem.category.name}
+          Category: {dataItem.detail.category.name}
         </p>
       </div>
     </div>

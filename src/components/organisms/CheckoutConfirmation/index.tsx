@@ -19,7 +19,7 @@ export default function CheckoutConfirmation() {
     }
 
     const data = {
-      voucher: dataItem._id,
+      voucher: dataItem.detail._id,
       nominal: dataTopUp.nominalItem._id,
       payment: dataTopUp.paymentItem.payment._id,
       bank: dataTopUp.paymentItem.bank._id,
