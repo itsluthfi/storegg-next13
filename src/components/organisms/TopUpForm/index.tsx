@@ -7,57 +7,17 @@ import { toast } from 'react-toastify';
 
 interface TopUpFormProps {
   nominals: NominalTypes[];
+  payments: PaymentTypes[];
 }
 
 export default function TopUpForm(props: TopUpFormProps) {
-  const { nominals } = props;
+  const { nominals, payments } = props;
   const router = useRouter();
 
   const [verifyID, setVerifyID] = useState('');
   const [bankAccountName, setBankAccountName] = useState('');
   const [nominalItem, setNominalItem] = useState({});
   const [paymentItem, setPaymentItem] = useState({});
-
-  const paymentsDummyData = [
-    {
-      banks: [
-        {
-          bankName: 'QRIS',
-          name: 'PT Store GG Indonesia',
-          noRekening: '1800 - 9090 - 2021',
-          _id: '659fe0b4af3a93af997eea3f',
-        },
-        {
-          bankName: 'Mandiri',
-          name: 'PT Store GG Indonesia',
-          noRekening: '1800 - 9090 - 2021',
-          _id: '659fe0c928a51bbeac787815',
-        },
-      ],
-      status: 'Y',
-      type: 'Transfer',
-      _id: '659fe0d65d660e093e4ce30b',
-    },
-    {
-      banks: [
-        {
-          bankName: 'Ambil Sendiri',
-          name: 'PT Store GG Indonesia',
-          noRekening: '1800 - 9090 - 2021',
-          _id: '659fe0dd25011ba83def5917',
-        },
-        {
-          bankName: 'Antar',
-          name: 'PT Store GG Indonesia',
-          noRekening: '1800 - 9090 - 2021',
-          _id: '659fe0e5199a3c74a2f6473a',
-        },
-      ],
-      status: 'Y',
-      type: 'COD',
-      _id: '659fe0ee07c9ca7db48b4631',
-    },
-  ];
 
   const onNominalItemChange = (data: NominalTypes) => {
     setNominalItem(data);
@@ -137,7 +97,7 @@ export default function TopUpForm(props: TopUpFormProps) {
         </p>
         <fieldset id="paymentMethod">
           <div className="row justify-content-between">
-            {paymentsDummyData.map((payment) =>
+            {payments.map((payment) =>
               payment.banks.map((bank) => (
                 <PaymentItem
                   key={payment._id}
