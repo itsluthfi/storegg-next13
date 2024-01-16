@@ -1,7 +1,31 @@
+import { useEffect, useState } from 'react';
 import Category from './Category';
 import TableRow from './TableRow';
+import { getOverviewMember } from '@/services/player';
+import { toast } from 'react-toastify';
 
 export default function OverviewContent() {
+  const [count, setCount] = useState([
+    {
+      _id: '',
+      valeu: 0,
+      name: '',
+    },
+  ]);
+
+  useEffect(() => {
+    async function getOverviewData() {
+      const response = await getOverviewMember();
+      if (response.error) {
+        toast.error(response.message);
+      } else {
+        setCount(response.data.count);
+      }
+    }
+
+    getOverviewData();
+  }, []);
+
   return (
     <main className="main-wrapper">
       <div className="ps-lg-0">
@@ -12,21 +36,11 @@ export default function OverviewContent() {
           </p>
           <div className="main-content">
             <div className="row">
-              <Category nominal={18500000} icon="ic-desktop">
-                Game
-                <br />
-                Desktop
-              </Category>
-              <Category nominal={8500000} icon="ic-mobile">
-                Game
-                <br />
-                Mobile
-              </Category>
-              <Category nominal={5000000} icon="ic-desktop">
-                Other
-                <br />
-                Categories
-              </Category>
+              {count.map((item) => (
+                <Category key={item._id} nominal={item.valeu} icon="ic-desktop">
+                  {item.name}
+                </Category>
+              ))}
             </div>
           </div>
         </div>

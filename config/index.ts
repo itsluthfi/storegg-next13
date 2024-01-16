@@ -38,7 +38,7 @@ export async function callAPI({ url, method, data, token }: CallAPITypes) {
   const res = {
     error: false,
     message: 'success',
-    data: response.data.data,
+    data: response.data.count ? response.data : response.data.data,
   };
 
   return res;
