@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import Sidebar from '@/components/organisms/Sidebar';
 import TransactionContent from '@/components/organisms/TransactionContent';
+import { jwtDecode } from 'jwt-decode';
+import { JTWPayloadTypes, UserTypes } from '@/services/data-types';
 
 export default function Transactions() {
   return (
@@ -17,4 +19,29 @@ export default function Transactions() {
       </section>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const { token } = req.cookies;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false,
+      },
+    };
+  }
+
+  const jwtToken = Buffer.from(token, 'base64').toString('ascii');
+  const payload: JTWPayloadTypes = jwtDecode(jwtToken);
+  const userPayload: UserTypes = payload.player;
+  const IMG = process.env.NEXT_PUBLIC_IMAGE;
+  userPayload.avatar = `${IMG}/${userPayload.avatar}`;
+
+  return {
+    props: {
+      user: userPayload,
+    },
+  };
 }
