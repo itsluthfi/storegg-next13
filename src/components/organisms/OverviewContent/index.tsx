@@ -12,6 +12,20 @@ export default function OverviewContent() {
       name: '',
     },
   ]);
+  const [data, setData] = useState([
+    {
+      _id: '',
+      status: '',
+      value: 0,
+      historyVoucherTopup: {
+        thumbnail: '',
+        gameName: '',
+        category: '',
+        coinQuantity: 0,
+        coinName: '',
+      },
+    },
+  ]);
 
   useEffect(() => {
     async function getOverviewData() {
@@ -20,11 +34,14 @@ export default function OverviewContent() {
         toast.error(response.message);
       } else {
         setCount(response.data.count);
+        setData(response.data.data);
       }
     }
 
     getOverviewData();
   }, []);
+
+  const IMG = process.env.NEXT_PUBLIC_IMAGE;
 
   return (
     <main className="main-wrapper">
@@ -61,38 +78,17 @@ export default function OverviewContent() {
                 </tr>
               </thead>
               <tbody>
-                <TableRow
-                  image="overview-1"
-                  title="Mobile Legends"
-                  category="Desktop"
-                  item={200}
-                  price={290000}
-                  status="Pending"
-                />
-                <TableRow
-                  image="overview-2"
-                  title="Call Of Duty: Modern"
-                  category="Desktop"
-                  item={550}
-                  price={740000}
-                  status="Success"
-                />
-                <TableRow
-                  image="overview-3"
-                  title="Clash of Clans"
-                  category="Mobile"
-                  item={100}
-                  price={120000}
-                  status="Failed"
-                />
-                <TableRow
-                  image="overview-4"
-                  title="The Royal Game"
-                  category="Mobile"
-                  item={225}
-                  price={200000}
-                  status="Pending"
-                />
+                {data.map((item) => (
+                  <TableRow
+                    key={item._id}
+                    image={`${IMG}/${item.historyVoucherTopup.thumbnail}`}
+                    title={item.historyVoucherTopup.gameName}
+                    category={item.historyVoucherTopup.category}
+                    item={`${item.historyVoucherTopup.coinQuantity} ${item.historyVoucherTopup.coinName}`}
+                    price={item.value}
+                    status={item.status}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
