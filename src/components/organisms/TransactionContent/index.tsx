@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getMemberTransactions } from '@/services/member';
 import { toast } from 'react-toastify';
 import ButtonTab from './ButtonTab';
@@ -21,20 +21,26 @@ export default function TransactionContent() {
       },
     },
   ]);
+  const [tab, setTab] = useState('all');
+
+  const getMemberTransactionsAPI = useCallback(async (value: string) => {
+    const response = await getMemberTransactions(value);
+    if (response.error) {
+      toast.error(response.message);
+    } else {
+      setTotal(response.data.total);
+      setData(response.data.data);
+    }
+  }, []);
 
   useEffect(() => {
-    async function getMemberTransactionsAPI() {
-      const response = await getMemberTransactions();
-      if (response.error) {
-        toast.error(response.message);
-      } else {
-        setTotal(response.data.total);
-        setData(response.data.data);
-      }
-    }
-
-    getMemberTransactionsAPI();
+    getMemberTransactionsAPI('all');
   }, []);
+
+  const onTabClick = (value: string) => {
+    setTab(value);
+    getMemberTransactionsAPI(value);
+  };
 
   const IMG = process.env.NEXT_PUBLIC_IMAGE;
 
@@ -59,10 +65,26 @@ export default function TransactionContent() {
         <div className="row mt-30 mb-20">
           <div className="col-lg-12 col-12 main-content">
             <div id="list_status_title">
-              <ButtonTab title="All" active />
-              <ButtonTab title="Success" active={false} />
-              <ButtonTab title="Pending" active={false} />
-              <ButtonTab title="Failed" active={false} />
+              <ButtonTab
+                onClick={() => onTabClick('all')}
+                title="All"
+                active={tab === 'all'}
+              />
+              <ButtonTab
+                onClick={() => onTabClick('success')}
+                title="Success"
+                active={tab === 'success'}
+              />
+              <ButtonTab
+                onClick={() => onTabClick('pending')}
+                title="Pending"
+                active={tab === 'pending'}
+              />
+              <ButtonTab
+                onClick={() => onTabClick('failed')}
+                title="Failed"
+                active={tab === 'failed'}
+              />
             </div>
           </div>
         </div>

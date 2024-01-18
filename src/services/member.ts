@@ -13,8 +13,15 @@ export async function getMemberOverview() {
   });
 }
 
-export async function getMemberTransactions() {
-  const url = `${API_URL}/${API_VER}/players/history`;
+export async function getMemberTransactions(valueParams: string) {
+  let params = '';
+  if (valueParams === 'all') {
+    params = '';
+  } else {
+    params = `?status=${valueParams}`;
+  }
+
+  const url = `${API_URL}/${API_VER}/players/history${params}`;
 
   return callAPI({
     url,
