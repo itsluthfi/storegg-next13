@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Category from './Category';
 import TableRow from './TableRow';
-import { getOverviewMember } from '@/services/player';
+import { getMemberOverview } from '@/services/member';
 import { toast } from 'react-toastify';
 
 export default function OverviewContent() {
@@ -28,8 +28,8 @@ export default function OverviewContent() {
   ]);
 
   useEffect(() => {
-    async function getOverviewData() {
-      const response = await getOverviewMember();
+    async function getMemberOverviewAPI() {
+      const response = await getMemberOverview();
       if (response.error) {
         toast.error(response.message);
       } else {
@@ -38,7 +38,7 @@ export default function OverviewContent() {
       }
     }
 
-    getOverviewData();
+    getMemberOverviewAPI();
   }, []);
 
   const IMG = process.env.NEXT_PUBLIC_IMAGE;
