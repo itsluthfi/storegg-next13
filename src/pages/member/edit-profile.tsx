@@ -1,9 +1,55 @@
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import Input from '@/components/atoms/Input';
 import Sidebar from '@/components/organisms/Sidebar';
+import { setUpdateProfile } from '@/services/member';
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
+import { JTWPayloadTypes, UserTypes } from '@/services/data-types';
+import { toast } from 'react-toastify';
 
 export default function EditProfile() {
+  const [user, setUser] = useState({
+    id: '',
+    username: '',
+    email: '',
+    avatar: '',
+  });
+  const [imagePreview, setImagePreview] = useState('');
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      const jwtToken = atob(token);
+      const payload: JTWPayloadTypes = jwtDecode(jwtToken);
+      const userPayload: UserTypes = payload.player;
+      const IMG = process.env.NEXT_PUBLIC_IMAGE;
+      user.avatar = `${IMG}/${userPayload.avatar}`;
+      setUser(userPayload);
+    }
+  }, []);
+
+  const IMG = process.env.NEXT_PUBLIC_IMAGE;
+
+  const onSubmit = async () => {
+    const data = new FormData();
+
+    data.append('name', user.username);
+    data.append('avatar', user.avatar);
+
+    const response = await setUpdateProfile(data, user.id);
+    if (response.error) {
+      toast.error(response.message);
+    } else {
+      toast.success('Edit profil berhasil!');
+      router.push('/member/edit-profile');
+    }
+  };
+
   return (
     <>
       <Head>
@@ -20,53 +66,70 @@ export default function EditProfile() {
             <div className="bg-card pt-30 ps-30 pe-30 pb-30">
               <form action="">
                 <div className="photo d-flex">
-                  <div className="position-relative me-20">
-                    <Image
-                      src="/img/avatar-1.png"
-                      width={90}
-                      height={90}
-                      className="avatar img-fluid"
-                      alt=""
-                    />
-                    <div className="avatar-overlay position-absolute top-0 d-flex justify-content-center align-items-center">
-                      <Image
-                        src="/icon/delete.svg"
-                        width={24}
-                        height={24}
-                        alt=""
-                      />
-                    </div>
-                  </div>
                   <div className="image-upload">
                     <label htmlFor="avatar">
-                      <Image
-                        src="/icon/upload.svg"
-                        width={90}
-                        height={90}
-                        alt=""
-                      />
+                      {imagePreview ? (
+                        <Image
+                          src={imagePreview}
+                          width={90}
+                          height={90}
+                          alt=""
+                          style={{ borderRadius: '100%' }}
+                        />
+                      ) : (
+                        <Image
+                          src={`${IMG}/${user.avatar}`}
+                          width={90}
+                          height={90}
+                          alt=""
+                          style={{ borderRadius: '100%' }}
+                        />
+                      )}
                     </label>
                     <input
                       id="avatar"
                       type="file"
                       name="avatar"
                       accept="image/png, image/jpeg"
+                      onChange={(event) => {
+                        const img = event.target.files[0];
+                        setImagePreview(URL.createObjectURL(img));
+                        return setUser({ ...user, avatar: img });
+                      }}
                     />
                   </div>
                 </div>
                 <div className="pt-30">
-                  <Input label="Full Name" type="text" id="name" />
+                  <Input
+                    label="Full Name"
+                    type="text"
+                    id="name"
+                    value={user.username}
+                    onChange={(event) =>
+                      setUser({
+                        ...user,
+                        username: event.target.value,
+                      })
+                    }
+                  />
                 </div>
                 <div className="pt-30">
-                  <Input label="Email Address" type="text" id="email" />
+                  <Input
+                    label="Email Address"
+                    type="text"
+                    id="email"
+                    disabled
+                    value={user.email}
+                  />
                 </div>
-                <div className="pt-30">
+                {/* <div className="pt-30">
                   <Input label="Phone" type="text" id="phone" />
-                </div>
+                </div> */}
                 <div className="button-group d-flex flex-column pt-50">
                   <button
-                    type="submit"
+                    type="button"
                     className="btn btn-save fw-medium text-lg text-white rounded-pill"
+                    onClick={onSubmit}
                   >
                     Save My Profile
                   </button>
