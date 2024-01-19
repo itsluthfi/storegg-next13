@@ -14,7 +14,7 @@ export default function TransactionsDetail({ transactionDetail }) {
       </Head>
 
       <section className="transactions-detail overflow-auto">
-        <TransactionDetailContent />
+        <TransactionDetailContent data={transactionDetail} />
       </section>
     </>
   );
