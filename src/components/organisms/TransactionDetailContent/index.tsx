@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Image from 'next/image';
 import Row from './Row';
 
@@ -79,13 +80,16 @@ export default function TransactionDetailContent(props) {
                 />
               </div>
               <div className="d-md-block d-flex flex-column w-100">
-                <a
-                  className="btn btn-whatsapp rounded-pill fw-medium text-white border-0 text-lg"
-                  href="#"
-                  role="button"
-                >
-                  WhatsApp ke Admin
-                </a>
+                <Link href="https://wa.me/087879796844" legacyBehavior>
+                  <a
+                    className="btn btn-whatsapp rounded-pill fw-medium text-white border-0 text-lg"
+                    role="button"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    WhatsApp ke Admin
+                  </a>
+                </Link>
               </div>
             </section>
           </div>
