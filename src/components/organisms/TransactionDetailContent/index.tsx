@@ -1,8 +1,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Row from './Row';
+import { HistoryTransactionTypes } from '@/services/data-types';
 
-export default function TransactionDetailContent(props) {
+interface TransactionDetailContentProps {
+  data: HistoryTransactionTypes;
+}
+
+export default function TransactionDetailContent(
+  props: TransactionDetailContentProps
+) {
   const { data } = props;
 
   const IMG = process.env.NEXT_PUBLIC_IMAGE;

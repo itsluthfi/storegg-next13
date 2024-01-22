@@ -3,29 +3,14 @@ import Category from './Category';
 import TableRow from './TableRow';
 import { getMemberOverview } from '@/services/member';
 import { toast } from 'react-toastify';
+import {
+  HistoryTransactionTypes,
+  TopUpCategoriesTypes,
+} from '@/services/data-types';
 
 export default function OverviewContent() {
-  const [count, setCount] = useState([
-    {
-      _id: '',
-      valeu: 0,
-      name: '',
-    },
-  ]);
-  const [data, setData] = useState([
-    {
-      _id: '',
-      status: '',
-      value: 0,
-      historyVoucherTopup: {
-        thumbnail: '',
-        gameName: '',
-        category: '',
-        coinQuantity: 0,
-        coinName: '',
-      },
-    },
-  ]);
+  const [count, setCount] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     async function getMemberOverviewAPI() {
@@ -53,7 +38,7 @@ export default function OverviewContent() {
           </p>
           <div className="main-content">
             <div className="row">
-              {count.map((item) => (
+              {count.map((item: TopUpCategoriesTypes) => (
                 <Category key={item._id} nominal={item.valeu} icon="ic-desktop">
                   {item.name}
                 </Category>
@@ -78,7 +63,7 @@ export default function OverviewContent() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item) => (
+                {data.map((item: HistoryTransactionTypes) => (
                   <TableRow
                     key={item._id}
                     image={`${IMG}/${item.historyVoucherTopup.thumbnail}`}

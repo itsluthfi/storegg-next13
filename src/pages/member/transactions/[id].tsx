@@ -1,10 +1,20 @@
 import Head from 'next/head';
 import TransactionDetailContent from '@/components/organisms/TransactionDetailContent';
 import { jwtDecode } from 'jwt-decode';
-import { JTWPayloadTypes, UserTypes } from '@/services/data-types';
+import {
+  HistoryTransactionTypes,
+  JTWPayloadTypes,
+  UserTypes,
+} from '@/services/data-types';
 import { getTransactionDetail } from '@/services/member';
 
-export default function TransactionsDetail({ transactionDetail }) {
+interface TransactionsDetailProps {
+  transactionDetail: HistoryTransactionTypes;
+}
+
+export default function TransactionsDetail(props: TransactionsDetailProps) {
+  const { transactionDetail } = props;
+
   return (
     <>
       <Head>
@@ -20,7 +30,18 @@ export default function TransactionsDetail({ transactionDetail }) {
   );
 }
 
-export async function getServerSideProps({ req, params }) {
+interface GetServerSideProps {
+  req: {
+    cookies: {
+      token: string;
+    };
+  };
+  params: {
+    id: string;
+  };
+}
+
+export async function getServerSideProps({ req, params }: GetServerSideProps) {
   const { id } = params;
   const { token } = req.cookies;
 

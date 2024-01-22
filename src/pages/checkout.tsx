@@ -6,13 +6,7 @@ import CheckoutItem from '@/components/organisms/CheckoutItem';
 import { jwtDecode } from 'jwt-decode';
 import { JTWPayloadTypes, UserTypes } from '@/services/data-types';
 
-interface CheckoutProps {
-  user: UserTypes;
-}
-
-export default function Checkout(props: CheckoutProps) {
-  const { user } = props;
-
+export default function Checkout() {
   return (
     <>
       <Head>
@@ -44,7 +38,15 @@ export default function Checkout(props: CheckoutProps) {
   );
 }
 
-export async function getServerSideProps({ req }) {
+interface GetServerSideProps {
+  req: {
+    cookies: {
+      token: string;
+    };
+  };
+}
+
+export async function getServerSideProps({ req }: GetServerSideProps) {
   const { token } = req.cookies;
 
   if (!token) {
@@ -63,8 +65,6 @@ export async function getServerSideProps({ req }) {
   userPayload.avatar = `${IMG}/${userPayload.avatar}`;
 
   return {
-    props: {
-      user: userPayload,
-    },
+    props: {},
   };
 }

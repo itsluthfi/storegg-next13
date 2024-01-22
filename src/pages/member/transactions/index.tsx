@@ -21,7 +21,15 @@ export default function Transactions() {
   );
 }
 
-export async function getServerSideProps({ req }) {
+interface GetServerSideProps {
+  req: {
+    cookies: {
+      token: string;
+    };
+  };
+}
+
+export async function getServerSideProps({ req }: GetServerSideProps) {
   const { token } = req.cookies;
 
   if (!token) {
@@ -40,8 +48,6 @@ export async function getServerSideProps({ req }) {
   userPayload.avatar = `${IMG}/${userPayload.avatar}`;
 
   return {
-    props: {
-      user: userPayload,
-    },
+    props: {},
   };
 }
